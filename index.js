@@ -32,7 +32,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
   const collection = client.db("schoolHub").collection("student");
   const StudentCollection = client.db("schoolHub").collection("StudentList");
-;
+  const SubjectCollection = client.db("schoolHub").collection("SubjectList");
 
 app.get('/newPost', (req, res) => {
     collection.find()
@@ -40,7 +40,15 @@ app.get('/newPost', (req, res) => {
         res.send(items)
     })
 })
+app.get('/newSub', (req, res) => {
+  SubjectCollection.find()
+  .toArray((err, items) => {
+      res.send(items)
+  })
+})
 app.get('/newService', (req, res) => {
+
+  
     collection.find()
     .toArray((err, items) => {
         res.send(items)
@@ -48,24 +56,16 @@ app.get('/newService', (req, res) => {
 })
 
 
-  app.post('/addPost', (req, res) => {
-    const addPost = req.body;
-    console.log('adding new event: ', addPost);
-    collection.insertOne(addPost)
-    .then(result => {
-        console.log('inserted count', result.insertedCount);
-        res.send(result.insertedCount > 0)
-    })
-})
-app.post('/addReview', (req, res) => {
-    const newEvent = req.body;
-    console.log('adding new event: ', newEvent)
-    collection.insertOne(newEvent)
-    .then(result => {
-        console.log('inserted count', result.insertedCount);
-        res.send(result.insertedCount > 0)
-    })
-})
+
+// app.post('/addReview', (req, res) => {
+//     const newEvent = req.body;
+//     console.log('adding new event: ', newEvent)
+//     collection.insertOne(newEvent)
+//     .then(result => {
+//         console.log('inserted count', result.insertedCount);
+//         res.send(result.insertedCount > 0)
+//     })
+// })
 app.post('/addStudent',(req, res) =>{
   const newProduct =req.body;
   console.log('added new product', newProduct)
@@ -75,22 +75,41 @@ app.post('/addStudent',(req, res) =>{
     res.send(result.insertedCount > 0)
   })
 })
-
-app.get('/products',(req,res)=>{
-  StudentCollection.find()
-  .toArray((err,items) =>{
-    res.send(items)
-    console.log('from data base',items);
+app.post('/addPost', (req, res) => {
+  const addPost = req.body;
+  console.log('adding new event: ', addPost);
+  collection.insertOne(addPost)
+  .then(result => {
+      console.log('inserted count', result.insertedCount);
+      res.send(result.insertedCount > 0)
+  })
+})
+app.post('/addSubject',(req, res) =>{
+  const newProduct =req.body;
+  console.log('added new product', newProduct)
+  SubjectCollection.insertOne(newProduct)
+  .then(result =>{
+    console.log('insertedCount',result.insertedCount);
+    res.send(result.insertedCount > 0)
   })
 })
 
+// app.get('/products',(req,res)=>{
+//   StudentCollection.find()
+//   .toArray((err,items) =>{
+//     res.send(items)
+//     console.log('from data base',items);
+//   })
+// })
 
 
-  app.delete('/deleteProduct/:id', (req, res) => {
-    const id = ObjectId(req.params.id);
-    collection.findOneAndDelete({_id: id})
-    .then(product => res.send(product.value))
+
+app.delete('/deleteProduct/:id', (req, res) => {
+  const id = ObjectId(req.params.id);
+  collection.findOneAndDelete({_id: id})
+  .then(product => res.send(product.value))
 })
+
 app.get('/student', (req, res) => {
     const queryProfile = req.query.id;
     StudentCollection.find({student: queryProfile})
@@ -100,7 +119,7 @@ app.get('/student', (req, res) => {
       console.log(err);
     })
   })
-
+  
 // client.close();
 });
 
