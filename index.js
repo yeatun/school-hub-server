@@ -1,12 +1,11 @@
 const express = require('express');
 
 const cors = require('cors');
-const ObjectId = require('mongodb').ObjectId;
+// const ObjectId = require('mongodb').ObjectId;
 const MongoClient = require('mongodb').MongoClient;
 require('dotenv').config();
 
 
-// const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ggzrw.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
 const uri= `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ggzrw.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`
 const app = express();
@@ -57,15 +56,7 @@ app.get('/newService', (req, res) => {
 
 
 
-// app.post('/addReview', (req, res) => {
-//     const newEvent = req.body;
-//     console.log('adding new event: ', newEvent)
-//     collection.insertOne(newEvent)
-//     .then(result => {
-//         console.log('inserted count', result.insertedCount);
-//         res.send(result.insertedCount > 0)
-//     })
-// })
+
 app.post('/addStudent',(req, res) =>{
   const newProduct =req.body;
   console.log('added new product', newProduct)
@@ -94,21 +85,10 @@ app.post('/addSubject',(req, res) =>{
   })
 })
 
-// app.get('/products',(req,res)=>{
-//   StudentCollection.find()
-//   .toArray((err,items) =>{
-//     res.send(items)
-//     console.log('from data base',items);
-//   })
-// })
 
 
 
-app.delete('/deleteProduct/:id', (req, res) => {
-  const id = ObjectId(req.params.id);
-  collection.findOneAndDelete({_id: id})
-  .then(product => res.send(product.value))
-})
+
 
 app.get('/student', (req, res) => {
     const queryProfile = req.query.id;
